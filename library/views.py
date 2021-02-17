@@ -1,12 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect
 from . import forms,models
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group,User
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required,user_passes_test
 from datetime import datetime,timedelta,date
 from django.core.mail import send_mail
+# from library.models import *
 from librarymanagemnt.settings import EMAIL_HOST_USER
 
 
@@ -75,7 +76,8 @@ def studentsignup_view(request):
 
 
 def is_admin(user):
-    return user.groups.filter(name='ADMIN').exists()
+    if user.is_superuser:
+        return user
 
 def afterlogin_view(request):
     if is_admin(request.user):
@@ -157,31 +159,39 @@ def viewstudent_view(request):
 
 @login_required(login_url='studentlogin')
 def viewissuedbookbystudent(request):
-    student=models.StudentExtra.objects.filter(user_id=request.user.id)
-    issuedbook=models.IssuedBook.objects.filter(enrollment=student[0].enrollment)
-
     li1=[]
 
     li2=[]
-    for ib in issuedbook:
-        books=models.Book.objects.filter(isbn=ib.isbn)
-        for book in books:
-            t=(request.user,student[0].enrollment,student[0].branch,book.name,book.author)
-            li1.append(t)
-        issdate=str(ib.issuedate.day)+'-'+str(ib.issuedate.month)+'-'+str(ib.issuedate.year)
-        expdate=str(ib.expirydate.day)+'-'+str(ib.expirydate.month)+'-'+str(ib.expirydate.year)
-        #fine calculation
-        days=(date.today()-ib.issuedate)
-        print(date.today())
-        d=days.days
-        fine=0
-        if d>15:
-            day=d-15
-            fine=day*10
-        t=(issdate,expdate,fine)
-        li2.append(t)
+    try:
+    
+        student=models.StudentExtra.objects.filter(user_id=request.user.id)
+        issuedbook=models.IssuedBook.objects.filter(enrollment=student[0].enrollment)
 
-    return render(request,'library/viewissuedbookbystudent.html',{'li1':li1,'li2':li2})
+        li1=[]
+
+        li2=[]
+        for ib in issuedbook:
+            books=models.Book.objects.filter(isbn=ib.isbn)
+            for book in books:
+                t=(request.user,student[0].enrollment,student[0].branch,book.name,book.author)
+                li1.append(t)
+            issdate=str(ib.issuedate.day)+'-'+str(ib.issuedate.month)+'-'+str(ib.issuedate.year)
+            expdate=str(ib.expirydate.day)+'-'+str(ib.expirydate.month)+'-'+str(ib.expirydate.year)
+            #fine calculation
+            days=(date.today()-ib.issuedate)
+            print(date.today())
+            d=days.days
+            fine=0
+            if d>15:
+                day=d-15
+                fine=day*10
+            t=(issdate,expdate,fine)
+            li2.append(t)
+
+        return render(request,'library/viewissuedbookbystudent.html',{'li1':li1,'li2':li2})
+    except:
+        return render(request,'library/viewissuedbookbystudent.html',{'li1':li1,'li2':li2})
+
 
 def aboutus_view(request):
     return render(request,'library/aboutus.html')
@@ -197,3 +207,23 @@ def contactus_view(request):
             send_mail(str(name)+' || '+str(email),message, EMAIL_HOST_USER, ['wapka1503@gmail.com'], fail_silently = False)
             return render(request, 'library/contactussuccess.html')
     return render(request, 'library/contactus.html', {'form':sub})
+
+
+
+@login_required(login_url='studentlogin')
+def delete_book(request,id):
+    book = models.Book.objects.get(id=id)
+    book.delete()
+    return redirect("viewbook")
+
+
+
+@login_required(login_url='studentlogin')
+def student_view_book(request):
+    books=models.Book.objects.all()
+    context = {
+        "books":books,
+    }
+    return render(request, 'library/student_view_book.html', context)
+
+

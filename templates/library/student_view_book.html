@@ -55,7 +55,7 @@ border-radius: 5px;
 </style>
   </head>
   <body>
-    {% include "library/navbaradmin.html" %}
+    {% include "library/navbarstudent.html" %}
     <br>
     <br>
     <h3 class="p-3 mb-2 bg-primary text-white" style = 'font-size: 50px;text-align:center;'>Available Book in Library !</h3>
@@ -67,12 +67,11 @@ border-radius: 5px;
 <th>ISBN</th>
 <th>Author</th>
 <th>Category</th>
-<th>Action</th>
 </tr>
 </thead>
 <tfoot>
 <tr>
-<td colspan="5" rowspan="5">
+<td colspan="4" rowspan="4">
 <div class="links"></div>
 </td>
 </tr>
@@ -84,11 +83,7 @@ border-radius: 5px;
       <td>{{book.isbn}}</td>
       <td>{{book.author}}</td>
       <td>{{book.category}}</td>
-      <td><a href="" class="btn btn-success">Edit</a>
-      <form action='{% url 'delete_book' book.id %}' method="POST" onsubmit="window.ondelete()" style="display: inline;" id="hi">
-        {% csrf_token %}
-      <button type="submit" class="btn btn-danger">Delete</button></td>
-    </form></td>
+      
     </tr>
   {% endfor %}
 </tbody>
@@ -104,12 +99,4 @@ border-radius: 5px;
 </html>
 
 
-<script type="text/Javascript">
-  window.ondelete= function(){
-    var isValid =confirm('Are you sure Do you Want To Delete ?');
-    if (!isValid){
-      event.preventDefault();
-      // alert("It Wont delete");
-    }
-  }
-</script>
+
