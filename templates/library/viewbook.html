@@ -84,7 +84,7 @@ border-radius: 5px;
       <td>{{book.isbn}}</td>
       <td>{{book.author}}</td>
       <td>{{book.category}}</td>
-      <td><a href="" class="btn btn-success">Edit</a>
+      <td><a href="{% url 'update_book' book.id %}" class="btn btn-success">Edit</a>
       <form action='{% url 'delete_book' book.id %}' method="POST" onsubmit="window.ondelete()" style="display: inline;" id="hi">
         {% csrf_token %}
       <button type="submit" class="btn btn-danger">Delete</button></td>

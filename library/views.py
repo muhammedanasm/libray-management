@@ -9,6 +9,8 @@ from datetime import datetime,timedelta,date
 from django.core.mail import send_mail
 # from library.models import *
 from librarymanagemnt.settings import EMAIL_HOST_USER
+from django.views.generic import View,UpdateView,CreateView
+
 
 
 def home_view(request):
@@ -227,3 +229,7 @@ def student_view_book(request):
     return render(request, 'library/student_view_book.html', context)
 
 
+class BookUpdate(UpdateView):
+    model = models.Book
+    fields = '__all__'
+    success_url='/viewbook'

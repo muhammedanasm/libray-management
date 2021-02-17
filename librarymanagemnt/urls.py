@@ -18,6 +18,7 @@ from django.conf.urls import include
 from django.urls import path
 from library import views
 from django.contrib.auth.views import LoginView,LogoutView
+from library.views import BookUpdate
 
 
 
@@ -49,6 +50,7 @@ urlpatterns = [
     path('contactus', views.contactus_view),
     path('delete_book/<int:id>', views.delete_book,name="delete_book"),
     path('student_view_book', views.student_view_book,name="student_view_book"),
+    path('update_book/(?P<pk>\d+)/$',BookUpdate.as_view(),name="update_book")
 
 
 
