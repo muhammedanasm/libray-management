@@ -223,6 +223,22 @@ def delete_book(request,id):
 @login_required(login_url='studentlogin')
 def student_view_book(request):
     books=models.Book.objects.all()
+    search_term = ''
+    if 'education' in request.GET:
+        books= models.Book.objects.filter(category='education')
+    if 'entertainment' in request.GET:
+        books= models.Book.objects.filter(category='entertainment')
+    if 'comics' in request.GET:
+        books= models.Book.objects.filter(category='comics')
+    if 'biography' in request.GET:
+        books= models.Book.objects.filter(category='biography')
+    if 'history' in request.GET:
+        books= models.Book.objects.filter(category='history')
+    if 'all' in request.GET:
+        books= models.Book.objects.all()
+    if 'search' in request.GET:
+        search_term = request.GET['search']
+        books=models.Book.objects.filter(name=search_term)
     context = {
         "books":books,
     }
