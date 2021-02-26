@@ -63,15 +63,15 @@ border-radius: 5px;
     <a class="btn btn-{% if 'all' in request.GET %}warning{% else %}primary{% endif %} mb-3" href="?all=True"
         role="button">All</a>
     <a class="btn btn-{% if 'education' in request.GET %}warning{% else %}primary{% endif %} mb-3" href="?education=True"
-        role="button">education</a>
+        role="button">Education</a>
     <a class="btn btn-{% if 'entertainment' in request.GET %}warning{% else %}primary{% endif %} mb-3" href="?entertainment=True"
-        role="button">entertainment</a>
+        role="button">Entertainment</a>
     <a class="btn btn-{% if 'comics' in request.GET %}warning{% else %}primary{% endif %} mb-3" href="?comics=True"
-        role="button">comics</a>
+        role="button">Comics</a>
     <a class="btn btn-{% if 'biography' in request.GET %}warning{% else %}primary{% endif %} mb-3" href="?biography=True"
-        role="button">biography</a>
+        role="button">Biography</a>
     <a class="btn btn-{% if 'history' in request.GET %}warning{% else %}primary{% endif %} mb-3" href="?history=True"
-        role="button">history</a>
+        role="button">History</a>
       <form class="form-inline">
         <div class="form-group mr-sm-2 mb-2">
             <input type="search" class="form-control" name="search" placeholder="Search" value={{ search_term }}>
